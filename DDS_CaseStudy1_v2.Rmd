@@ -26,7 +26,7 @@ library(ggplot2)
 library(reshape2)
 
 #Set working directory
-setwd("C:/Users/Armando/Desktop/SMU/Doing Data Science/Case_Study_1")
+setwd("C:/Users/Armando/Desktop/SMU Data Science/MSDS 6306 (Doing Data Science)/Case Study 1")
 
 # Read CSV into R
 beer_df <- read.csv(file="Beers.csv", header=TRUE, sep=",")

@@ -229,9 +229,9 @@ ggplot(na.omit(beersAndPubs), aes(x=ABV)) + geom_density(color="darkblue", fill=
 
 ### Boxplots
 # ABV
-ggplot(data=na.omit(beersAndPubs), aes(y=ABV)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total ABV Across all U.S. States") + xlab("All States")
+ggplot(data=na.omit(beersAndPubs), aes(y=ABV,x=State)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total ABV Across all U.S. States") + xlab("All States")
 # IBU
-ggplot(data=na.omit(beersAndPubs), aes(y=IBU)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total Bitterness Across all States") + xlab("All States")
+ggplot(data=na.omit(beersAndPubs), aes(y=IBU,x=State)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total Bitterness Across all States") + xlab("All States")
 
 ```
 

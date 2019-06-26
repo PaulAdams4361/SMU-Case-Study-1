@@ -1,7 +1,7 @@
 ---
 title: "DDS Case Study 1"
 author: "Armando Vela & Paul Adams"
-date: "June 25, 2019"
+date: "June 26, 2019"
 output: html_document
 ---
 
@@ -124,7 +124,7 @@ ggplot(data=na_df, aes(x=categories, y=na_count)) +
 
 
 #### 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
-Before we began calculating the median ABV and IBU for each state, we applied an imputation for the NAs identified within the previous section.  Our method in filling out each NA, was to use the average ABV or IBU value calculated for each beer style.
+Before we began calculating the median ABV and IBU for each state, we applied an imputation for the NAs identified within the previous section.  Our method in filling out each NA, was to use the median ABV or IBU value calculated for each state.
 
 The images below shows the median alcohol content (ABV) and median international bitterness unit (IBU) for each state.
 ```{r, echo=TRUE, fig.height = 7, fig.width = 5}
@@ -197,8 +197,8 @@ ggplot(data=medianIBUbyState, aes(x=reorder(State,IBU),y=IBU,fill=State)) +
 
 
 
-#### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
-Response to question an briefly exlain the purpose of the code chunk.
+#### 5.   Which state has the maximum alcohol content (ABV) beer? Which state has the most bitter (IBU) beer?
+The print statements below shows the states with beers having the max median ABV, the absolute max ABV, max median IBU, and absolute max IBU.
 ```{r, echo=TRUE}
 # State with max median ABV (dataframe pre-ordered, so taking first row)
 MaxABVstate <- (medianABVbyState[1,]) %>% data.frame()
@@ -220,7 +220,8 @@ print(beersAndPubs[which.max(beersAndPubs$IBU),c("State","IBU")], row.names = FA
 
 
 #### 6.   Summary statistics for the ABV variable.
-Response to question an briefly exlain the purpose of the code chunk.
+The images below display the summary stastics associated to the ABV variable.
+
 ```{r, echo=TRUE}
 
 # Probability density distribution for IBU
@@ -240,7 +241,8 @@ ggplot(data=na.omit(beersAndPubs), aes(y=IBU,x=State)) + geom_boxplot(stat="boxp
 
 
 #### 7.   Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
-Response to question an briefly exlain the purpose of the code chunk.
+After reviewing a scatterplot comparing the Total Alochol by Volume vs Bitterness, there is a slight correlation between the two factors.  As you can see within the image below, the slope within the blue simple linear regression line is positive, thus confirming there is a relationship between the bitterness of the beer and its alcoholic content.
+
 ```{r, echo=TRUE}
 
 #plot of IBU vs ABV with simple linear regression line

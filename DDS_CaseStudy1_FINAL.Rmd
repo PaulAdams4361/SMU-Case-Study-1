@@ -200,11 +200,13 @@ ggplot(data=medianIBUbyState, aes(x=reorder(State,IBU),y=IBU,fill=State)) +
 #### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 Response to question an briefly exlain the purpose of the code chunk.
 ```{r, echo=TRUE}
-# State with max median ABV
-print(medianABVbyState[which.max(medianABVbyState$ABV),], row.names = FALSE)
+# State with max median ABV (dataframe pre-ordered, so taking first row)
+MaxABVstate <- (medianABVbyState[1,]) %>% data.frame()
+print(MaxABVstate, row.names = F)
 
-# State with max median IBU
-print(medianIBUbyState[which.max(medianIBUbyState$IBU),], row.names = FALSE)
+# State with max median IBU (dataframe pre-ordered, so taking first row)
+MaxIBUstate <- (medianIBUbyState[1,]) %>% data.frame()
+print(MaxIBUstate, row.names = F)
 
 # State with the absolute max (singlemost - not median - strongest) ABV
 print(beersAndPubs[which.max(beersAndPubs$ABV),c("State","ABV")], row.names = FALSE)

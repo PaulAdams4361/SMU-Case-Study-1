@@ -16,4 +16,8 @@ The purpose of this folder is to keep track of activity associated to the SMU Ca
 ### Analysis Notes
 To complete the project, both Paul & Armando each coded a separate (R/RMD) file to address each question (See ARCHIVE folder).  The best code from each file was then chosen and placed within the FINAL.rmd file. 
 
+### Contact Info
+If you have any questions, feel free to send an email to arvela@mail.smu.edu or paula@mail.smu.edu.
+
+
 

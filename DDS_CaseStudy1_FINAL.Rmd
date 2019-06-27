@@ -10,17 +10,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## P&A Consulting Group
+####  https://github.com/avela0317/SMU-Case-Study-1
+
+
 ####  Budweiser Inc. Beer & Brewery Analysis
 
 After carefully reviewing the beer offerings data and brewery data provided by your company, our consulting group was able to uncover helpful information in choosing which beer type to offer within specific US states. Our analysis, listed below, mainly dealt with reviewing the alcohol content (ABV) and international bitterness unit (IBU) for each beer type within each state.  
 
-Some findings we identified were that if your company hoped to offer a more bitter beer (higher IBU), than the state of West Virginia should be used for the initial roll-out since the citizens are already accustomed to a more bitter beer since it has the highest median IBU value in the US.  Also, if you were going to be offering a lighter beer, than the state of Utah would probably best since there median ABV is the lowest in the US.
+Some findings we identified were that if your company hoped to offer a more bitter beer (higher IBU), than the state of Maine should be used for the initial roll-out since the citizens are already accustomed to a more bitter beer since it has the highest median IBU value in the US.  Also, if you were going to be offering a lighter beer, than the state of Utah would probably best since there median ABV is the lowest in the US.
 
-Within the writeup below you can find our analysis, regarding the beer & brewery data provided
-
-
+Within the writeup below you can find our analysis, regarding the beer & brewery data provided.
 
 ```{r, echo=TRUE}
+
 library(tidyverse)
 library(ggplot2)
 library(reshape2)
@@ -35,14 +37,17 @@ setwd("C:/Users/Pablo/Desktop/DS 6306 - Doing Data Science/Unit 7")
 beerData <- read.csv(file="Beers.csv", header=TRUE, sep=",")
 
 breweryData <- read.csv(file="Breweries.csv", header=TRUE, sep=",")
+
 ```
 
 
-#### 1. How many breweries are present in each state?
+
+#### 1.   How many breweries are present in each state?
+
 The image below displays the number of breweries present in each state.  As you will see, Colorado has highest the amount of breweries with 47.  Also, the following states are tied for having the the lowest amount of breweries with 1: West Virginia, South Dakota, North Dakota, & the District of Columbia. 
 
-
 ```{r, echo=TRUE, fig.height = 7, fig.width = 5}
+
 #count of breweries per state
 StateBrewCnt <- sqldf("select State, count(*) as Brewery_Count
                       from breweryData
@@ -69,8 +74,11 @@ ggplot(data=StateBrewCnt, aes(x=reorder(State,Brewery_Count),y=Brewery_Count,fil
 ```
 
 
+
 #### 2.   Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
+
 To further our analysis, we have combined the brewery data set with the beer data set.  Within the image below, we have listed the first 6 rows & last 6 rows of the combined data.
+
 ```{r, echo=TRUE}
 
 #Merging the two datasets based on Brewery ID
@@ -82,12 +90,14 @@ names(beersAndPubs) <- c("Brewery_ID","Beer_Name","Beer_ID","ABV","IBU","Style",
 head(beersAndPubs, 6)
 tail(beersAndPubs,6)
 
-
 ```
 
 
+
 #### 3.   Report the number of NA's in each column.
+
 After continuing to review the combined data set, our group has identified a number of NAs (ie. missing values) within a few columns.  These will be reviewed and addressed within the next section.
+
 ```{r, echo=TRUE}
 
 #Gather count of NA
@@ -124,19 +134,22 @@ ggplot(data=na_df, aes(x=categories, y=na_count)) +
 
 
 #### 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
-Before we began calculating the median ABV and IBU for each state, we applied an imputation for the NAs identified within the previous section.  Our method in filling out each NA, was to use the average ABV or IBU value calculated for each beer style.
+
+Before we began calculating the median ABV and IBU for each state, we applied an imputation for the NAs identified within the previous section.  Our method in filling out each NA, was to use the median ABV or IBU value calculated for each state.
 
 The images below shows the median alcohol content (ABV) and median international bitterness unit (IBU) for each state.
+
 ```{r, echo=TRUE, fig.height = 7, fig.width = 5}
 
 # This replaces the NA ABVs and IBUs in each state by the median of each State (not the national median)
 beersAndPubs <- beersAndPubs %>% group_by(State) %>% mutate(ABV = na.median(ABV))
 beersAndPubs <- beersAndPubs %>% group_by(State) %>% mutate(IBU = na.median(IBU))
-# "All values of 'x' are missing (NA). Replacement value is 'NA'. Returning values unchanged" is thrown
-# Whenever there is a state with no non-NA values to provide a median estimate with. To correct for this,
+
+# "All values of 'x' are missing (NA). Replacement value is 'NA'. Returning values unchanged" is thrown when-
+# ever there is a state with no non-NA values with which to provide a median estimate. To correct for this,
 # these states will receive the nationwide median in the next step
 beersAndPubs <- beersAndPubs %>% mutate(IBU = na.median(IBU)) %>% data.frame()
-# Ensuring NAs were resolved (forced override if not - this was vetted with Proof of Concept):
+# Ensuring NAs were resolved (forced override if not resolved - this was validated with POC)
 beersAndPubs <- beersAndPubs %>% mutate(IBU = na.median(IBU)) %>% data.frame()
 
 # creating ordered dataframe for overall medians for each state 
@@ -150,7 +163,6 @@ medianABVbyState
 medianIBUbyState
 
 ###Steps below are to identify median ABV per style and update our model dataframe values accordingly###
-
 #Separate IBU and Style into separate dataframe
 abv_style_df <- beersAndPubs[,c("ABV","Style")]
 
@@ -192,53 +204,102 @@ ggplot(data=medianIBUbyState, aes(x=reorder(State,IBU),y=IBU,fill=State)) +
       axis.title.x = element_text(color="forestgreen", vjust=-0.35),
       axis.title.y = element_text(color="cadetblue" , vjust=0.35)   
         )
-```
-
-
-
-
-#### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
-Response to question an briefly exlain the purpose of the code chunk.
-```{r, echo=TRUE}
-# State with max median ABV
-print(medianABVbyState[which.max(medianABVbyState$ABV),], row.names = FALSE)
-
-# State with max median IBU
-print(medianIBUbyState[which.max(medianIBUbyState$IBU),], row.names = FALSE)
-
-# State with the absolute max (singlemost - not median - strongest) ABV
-print(beersAndPubs[which.max(beersAndPubs$ABV),c("State","ABV")], row.names = FALSE)
-
-# State with the absolute max (singlemost - not median - bitter) IBU
-print(beersAndPubs[which.max(beersAndPubs$IBU),c("State","IBU")], row.names = FALSE)
 
 ```
 
+
+
+#### 5.   Which state has the maximum alcohol content (ABV) beer? Which state has the most bitter (IBU) beer?
+
+After reviewing the charts from above, Kentucky has the highest median alcohol content (ABV) beer.  Furthermore, Maine has the highest median IBU for beer.
 
 
 
 #### 6.   Summary statistics for the ABV variable.
-Response to question an briefly exlain the purpose of the code chunk.
-```{r, echo=TRUE}
+
+The images below display the summary stastics associated to the ABV variable.
+
+```{r, echo=TRUE, fig.height = 7, fig.width = 12}
 
 # Probability density distribution for IBU
-ggplot(na.omit(beersAndPubs), aes(x=IBU)) + geom_density(color="darkblue", fill="skyblue2") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total Bitterness Distribution Across all States")
+ggplot(na.omit(beersAndPubs), aes(x=IBU)) + 
+  geom_density(color="darkblue", fill="skyblue2") + 
+  geom_vline(aes(xintercept=mean(IBU)),
+            color="blue", linetype="dashed", size=1) +
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Bitterness Distribution Across all States") +
+  ylab("Distribution")
 
 # Probability density distribution for ABV
-ggplot(na.omit(beersAndPubs), aes(x=ABV)) + geom_density(color="darkblue", fill="skyblue2") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total Alcohol by Volume Distribution Across all States")
+ggplot(na.omit(beersAndPubs), aes(x=ABV)) + 
+  geom_density(color="darkblue", fill="skyblue2") + 
+  geom_vline(aes(xintercept=mean(ABV)),
+            color="blue", linetype="dashed", size=1) +
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Alcohol by Volume Distribution Across all States") +
+  ylab("Distribution")
 
 ### Boxplots
-# ABV
-ggplot(data=na.omit(beersAndPubs), aes(y=ABV)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total ABV Across all U.S. States") + xlab("All States")
-# IBU
-ggplot(data=na.omit(beersAndPubs), aes(y=IBU)) + geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + theme(panel.background = element_rect(fill = 'ivory1'),plot.title = element_text(hjust = 0.5)) + ggtitle("Total Bitterness Across all States") + xlab("All States")
+# ABV by State
+ggplot(data=na.omit(beersAndPubs), aes(y=ABV,x=State)) + 
+  geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Alcohol by Volume by each State") + 
+  xlab("State")
+
+# ABV Nationally
+ggplot(data=na.omit(beersAndPubs), aes(y=ABV)) + 
+  geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Alcohol by Volume Across all States") + 
+  xlab("All States")
+
+# IBU by State
+ggplot(data=na.omit(beersAndPubs), aes(y=IBU,x=State)) + 
+  geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Bitterness by each State") + 
+  xlab("State")
+
+# IBU Nationally
+ggplot(data=na.omit(beersAndPubs), aes(y=IBU)) + 
+  geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
+  theme(panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        ) + 
+  ggtitle("Total Bitterness Across all States") + 
+  xlab("All States")
 
 ```
 
 
 
 #### 7.   Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
-Response to question an briefly exlain the purpose of the code chunk.
+
+After reviewing a scatterplot comparing the Total Alochol by Volume vs Bitterness, there is a slight correlation between the two factors.  As you can see within the image below, the slope within the blue simple linear regression line is positive, thus confirming there is a relationship between the bitterness of the beer and its alcoholic content.
+
 ```{r, echo=TRUE}
 
 #plot of IBU vs ABV with simple linear regression line
@@ -248,7 +309,9 @@ ggplot(beersAndPubs, aes(x=IBU, y=ABV, fill = IBU)) +
   theme(
         panel.background = element_rect(fill = 'ivory1'),
         plot.title = element_text(hjust = 0.5),
-        legend.position = "none"
+        legend.position = "none",
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
         ) +
   ggtitle("Total Alcohol by Volume vs. Bitterness Correlation")
 

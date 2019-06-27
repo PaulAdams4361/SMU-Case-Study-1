@@ -7,8 +7,8 @@ The purpose of this folder is to keep track of activity associated to the SMU Ca
 ### SMU-Case-Study-1 Folder Notes
 1.  **ARCHIVE folder**:  Lists old R/RMD files that will not be presented to the grader.
 2.  **DATA folder**: Contains the beer, brewery, and combined csv files used within our analysis.
-3.  **Final.rmd file**: This is the final (ready-for-submission) rmd file.
-4.  **Final.html file**: This is the final (ready-for-submission) html file.
+3.  **DDS_CaseStudy1_FINAL.rmd file**: This is the final (ready-for-submission) rmd file.
+4.  **DDS_CaseStudy1_FINAL.html file**: This is the final (ready-for-submission) html file.
 5.  **Codebook.md**: Contains additional information on the variables created within our Final.rmd file.
 6.  **README.md**: This is the current file containing helpful information regarding our group project.
 

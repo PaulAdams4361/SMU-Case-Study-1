@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 After carefully reviewing the beer offerings data and brewery data provided by your company, our consulting group was able to uncover helpful information in choosing which beer type to offer within specific US states. Our analysis, listed below, mainly dealt with reviewing the alcohol content (ABV) and international bitterness unit (IBU) for each beer type within each state.  
 
-Some findings we identified were that if your company hoped to offer a more bitter beer (higher IBU), than the state of West Virginia should be used for the initial roll-out since the citizens are already accustomed to a more bitter beer since it has the highest median IBU value in the US.  Also, if you were going to be offering a lighter beer, than the state of Utah would probably best since there median ABV is the lowest in the US.
+Some findings we identified were that if your company hoped to offer a more bitter beer (higher IBU), than the state of Maine should be used for the initial roll-out since the citizens are already accustomed to a more bitter beer since it has the highest median IBU value in the US.  Also, if you were going to be offering a lighter beer, than the state of Utah would probably best since there median ABV is the lowest in the US.
 
 Within the writeup below you can find our analysis, regarding the beer & brewery data provided
 
@@ -198,7 +198,7 @@ ggplot(data=medianIBUbyState, aes(x=reorder(State,IBU),y=IBU,fill=State)) +
 
 
 #### 5.   Which state has the maximum alcohol content (ABV) beer? Which state has the most bitter (IBU) beer?
-The print statements below shows the states with beers having the max median ABV, the absolute max ABV, max median IBU, and absolute max IBU.
+After reviewing the charts from above, Kentucky has the highest median alcohol content (ABV) beer.  Furthermore, Maine has the highest median IBU for beer.
 ```{r, echo=TRUE}
 # State with max median ABV (dataframe pre-ordered, so taking first row)
 MaxABVstate <- (medianABVbyState[1,]) %>% data.frame()

@@ -64,11 +64,11 @@ ggplot(data=StateBrewCnt, aes(x=reorder(State,Brewery_Count),y=Brewery_Count,fil
   xlab("State") +
   ylab("Brewery Count") +
   theme(
-      panel.background = element_rect(fill = 'ivory1'),
-      plot.title = element_text(hjust = 0.5),
-      axis.text.y = element_text(size=8),
-      axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-      axis.title.y = element_text(color="cadetblue" , vjust=0.35)   
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=8),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         )
 
 ```
@@ -98,11 +98,18 @@ tail(beersAndPubs,6)
 
 After continuing to review the combined data set, our group has identified a number of NAs (ie. missing values) within a few columns.  These will be reviewed and addressed within the next section.
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, fig.height = 7, fig.width = 12.5}
 
 #Gather count of NA
 na_count <-sapply(beersAndPubs, 
                   function(cnt) sum(length(which(is.na(cnt)))))
+
+# Collect the percent of all NA values representative of the total count of all rows in the data set
+percentNA <- ((na_count/(nrow(beersAndPubs)))*100)
+percentNA <- paste0(round(percentNA, digits = 1),"%")
+
+# Create a count of NAs with percents in parentheses
+percentCountNA <- paste(na_count," (",percentNA,")",sep="")
 
 #Convert count vector to dataframe
 na_df <- data.frame(na_count)
@@ -115,17 +122,22 @@ ggplot(data=na_df, aes(x=categories, y=na_count)) +
   geom_bar(stat="identity", fill="blue") +
   ggtitle("Count of NAs per Variable Category") +
   coord_flip() + 
-  geom_text(data = na_df, 
-            aes(y = na_count, label = na_count), size = 3,
-            vjust = .35, hjust=-.4) +
+  geom_text(
+            data = na_df, 
+            aes(y = na_count, 
+                label = percentCountNA
+                ), 
+            size = 4,
+            vjust = .35, hjust=-.01) +
   ylim(0,1050) +
   theme(
-      panel.background = element_rect(fill = 'ivory1'),
-      axis.text.y = element_text(size=8),
-      axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-      axis.title.y = element_text(color="cadetblue" , vjust=0.35),
-      plot.title = element_text(hjust = 0.5)
-          ) +
+        panel.background = element_rect(fill = 'ivory1'),
+        axis.text.y = element_text(size=13),
+        axis.text.x = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15),
+        plot.title = element_text(hjust = 0.5, size=15)
+        ) +
   ylab("Count") +
   xlab("Categories")
 
@@ -175,17 +187,18 @@ ggplot(data=medianABVbyState, aes(x=reorder(State,ABV),y=ABV,fill=State)) +
   geom_bar(stat="identity", show.legend = F) + 
   ggtitle("Median ABV Per State") +
   coord_flip() + 
-  geom_text(data = medianABVbyState, 
+  geom_text(
+            data = medianABVbyState, 
             aes(y = ABV, label = substr(ABV,0,5)), size = 3,
             vjust = .35, hjust=-.4) +
   ylim(0,0.09) +
   xlab("State") +
   theme(
-      panel.background = element_rect(fill = 'ivory1'),
-      plot.title = element_text(hjust = 0.5),
-      axis.text.y = element_text(size=8),
-      axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-      axis.title.y = element_text(color="cadetblue" , vjust=0.35)   
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=8),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)   
         )
 
 #Plot Median IBU Per State
@@ -193,16 +206,18 @@ ggplot(data=medianIBUbyState, aes(x=reorder(State,IBU),y=IBU,fill=State)) +
   geom_bar(stat="identity", show.legend = F) + 
   ggtitle("Median IBU Per State") +
   coord_flip() + 
-  geom_text(data = medianIBUbyState, 
+  geom_text(
+            data = medianIBUbyState, 
             aes(y = IBU, label = substr(IBU,0,5)), size = 3,
-            vjust = .35, hjust=-.4) +
+            vjust = .35, hjust=-.4
+            ) +
   xlab("State")+
   theme(
-      panel.background = element_rect(fill = 'ivory1'),
-      plot.title = element_text(hjust = 0.5),
-      axis.text.y = element_text(size=8),
-      axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-      axis.title.y = element_text(color="cadetblue" , vjust=0.35)   
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=8),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)   
         )
 
 ```
@@ -226,46 +241,59 @@ ggplot(na.omit(beersAndPubs), aes(x=IBU)) +
   geom_density(color="darkblue", fill="skyblue2") + 
   geom_vline(aes(xintercept=mean(IBU)),
             color="blue", linetype="dashed", size=1) +
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  geom_text(aes(x=mean(IBU), label=round(mean(IBU), digits=2), y=0.04, hjust = -0.5), colour="blue", angle=0) +
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        axis.text.y = element_text(size=13),
+        axis.text.x = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15),
+        plot.title = element_text(hjust = 0.5, size=15)  
         ) + 
   ggtitle("Total Bitterness Distribution Across all States") +
-  ylab("Distribution")
+  ylab("Distribution Density")
 
 # Probability density distribution for ABV
 ggplot(na.omit(beersAndPubs), aes(x=ABV)) + 
   geom_density(color="darkblue", fill="skyblue2") + 
   geom_vline(aes(xintercept=mean(ABV)),
             color="blue", linetype="dashed", size=1) +
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  geom_text(aes(x=mean(ABV), label=round(mean(ABV), digits=2), y=40, hjust = -0.6), colour="blue", angle=0) +
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=13),
+        axis.text.x = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         ) + 
   ggtitle("Total Alcohol by Volume Distribution Across all States") +
-  ylab("Distribution")
+  ylab("Distribution Density")
 
 ### Boxplots
 # ABV by State
 ggplot(data=na.omit(beersAndPubs), aes(y=ABV,x=State)) + 
   geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         ) + 
-  ggtitle("Total Alcohol by Volume by each State") + 
+  ggtitle("Total Alcohol by Volume by State") + 
   xlab("State")
 
 # ABV Nationally
 ggplot(data=na.omit(beersAndPubs), aes(y=ABV)) + 
   geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=13),
+        axis.text.x = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         ) + 
   ggtitle("Total Alcohol by Volume Across all States") + 
   xlab("All States")
@@ -273,21 +301,26 @@ ggplot(data=na.omit(beersAndPubs), aes(y=ABV)) +
 # IBU by State
 ggplot(data=na.omit(beersAndPubs), aes(y=IBU,x=State)) + 
   geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         ) + 
-  ggtitle("Total Bitterness by each State") + 
+  ggtitle("Total Bitterness by State") + 
   xlab("State")
 
 # IBU Nationally
 ggplot(data=na.omit(beersAndPubs), aes(y=IBU)) + 
   geom_boxplot(stat="boxplot", fill="skyblue2", color="darkblue") + 
-  theme(panel.background = element_rect(fill = 'ivory1'),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+  theme(
+        panel.background = element_rect(fill = 'ivory1'),
+        plot.title = element_text(hjust = 0.5, size=15),
+        axis.text.y = element_text(size=13),
+        axis.text.x = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)
         ) + 
   ggtitle("Total Bitterness Across all States") + 
   xlab("All States")
@@ -310,8 +343,10 @@ ggplot(beersAndPubs, aes(x=IBU, y=ABV, fill = IBU)) +
         panel.background = element_rect(fill = 'ivory1'),
         plot.title = element_text(hjust = 0.5),
         legend.position = "none",
-        axis.title.x = element_text(color="forestgreen", vjust=-0.35),
-        axis.title.y = element_text(color="cadetblue" , vjust=0.35)  
+        axis.text.x = element_text(size=13),
+        axis.text.y = element_text(size=13),
+        axis.title.x = element_text(color="forestgreen", vjust=-0.35, size=15),
+        axis.title.y = element_text(color="cadetblue" , vjust=0.35, size=15)  
         ) +
   ggtitle("Total Alcohol by Volume vs. Bitterness Correlation")
 
